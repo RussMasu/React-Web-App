@@ -23,16 +23,16 @@ app.get('/', (req, res) => {
     return res.json("From backend side");
 });
 
-// Define a route to fetch all items from the 'items' table
-app.get('/items', (req, res) => {
-    const sql = "select * from items"; // SQL query to select all items
-    db.query(sql, (err, data) => { // Execute the SQL query
-        if (err) return res.json(err); // If there's an error, return the error
-        return res.json(data); // Otherwise, return the data as JSON
+// Define a route to fetch all items from the 'product' table
+app.get('/product', (req, res) => {
+    const sql = "select * from product";
+    db.query(sql, (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
     })
 });
 
-// Start the server and listen on port 8080
-app.listen(8080, () => {
+// Start the server and listen on port 8081
+app.listen(8081, () => {
     console.log("listening");
 });

@@ -5,6 +5,10 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  //fetch data
+  fetch("http://localhost:8081/product")
+    .then(response => response.json())
+    .then(data => console.log(data))
 
   return (
     <>
