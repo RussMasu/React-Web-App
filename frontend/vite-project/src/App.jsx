@@ -5,19 +5,19 @@ import './App.css';
 function App() {
   const [inputValue, setInputValue] = useState('');
 
-  function handleChange(e){
-    setInputValue(e.target.value);
-  }
+  const handleChange = (e) => {
+    setInputValue({ ...inputValue, [e.target.name]: e.target.value });
+  };
   
   //send data
   function handleSubmit(e){
     //handle data
     e.preventDefault();
-    setInputValue(e.target.value);
+    //setInputValue(e.target.value);
     fetch('http://localhost:8081/form',{
       method:"POST",
       headers:{'Content-type':'application/json'},
-      body:JSON.stringify({fname:inputValue})
+      body:JSON.stringify(inputValue)
     })
     .then((response) => response.json())
     .catch((error) => {console.error("error submitting form data",error)})
@@ -31,7 +31,9 @@ function App() {
     <>
       <form onSubmit={handleSubmit}>
         <label for ="fname">first name </label>
-        <input type="text" onChange={handleChange}/>
+        <input type="text" name="fname" onChange={handleChange}/>
+        <label for ="fname">first name </label>
+        <input type="text" name="lname" onChange={handleChange}/>
         <input type="submit"/>
       </form>
     </>
