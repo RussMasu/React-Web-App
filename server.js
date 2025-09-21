@@ -3,9 +3,11 @@
 const express = require('express'); // Express framework for handling HTTP requests
 const pg = require('pg'); // pg client for Node.js
 const cors = require('cors'); // For web security
+const bodyParser = require('body-parser');
 
 // Create an instance of express
 const app = express();
+app.use(bodyParser.json());
 app.use(cors());
 
 // Create a connection to the PostgreSQL database
@@ -31,6 +33,12 @@ app.get('/product', (req, res) => {
         return res.json(data);
     })
 });
+
+// get form data TODO santize inputs, look up sending data from react to express
+app.post('/form',(req,res) =>{
+    const data = req.body;
+    console.log(data);
+})
 
 // Start the server and listen on port 8081
 app.listen(8081, () => {

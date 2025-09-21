@@ -1,37 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { Grid } from '@mui/material';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-  //fetch data
-  fetch("http://localhost:8081/product")
+  const [inputValue, setInputValue] = useState('');
+
+  function handleChange(e){
+    setInputValue(e.target.value);
+  }
+  
+  //send data
+  function handleSubmit(e){
+    //handle data
+    e.preventDefault();
+    setInputValue(e.target.value);
+    fetch('http://localhost:8081/form',{
+      method:"POST",
+      headers:{'Content-type':'application/json'},
+      body:JSON.stringify({fname:inputValue})
+    })
+    .then((response) => response.json())
+    .catch((error) => {console.error("error submitting form data",error)})
+  }
+  //fetch data - change so only called on page load instead of app update
+  fetch("http://localhost:8081/product")//called every app is updated such as type into form
     .then(response => response.json())
     .then(data => console.log(data))
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <form onSubmit={handleSubmit}>
+        <label for ="fname">first name </label>
+        <input type="text" onChange={handleChange}/>
+        <input type="submit"/>
+      </form>
     </>
   )
 }
