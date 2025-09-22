@@ -25,9 +25,18 @@ app.get('/', (req, res) => {
     return res.json("From backend side");
 });
 
-// Define a route to fetch all items from the 'product' table
+// Define a route to fetch all items from the product table
 app.get('/product', (req, res) => {
     const sql = "select * from product";
+    db.query(sql, (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    })
+});
+
+// Define a route to fetch current order number table
+app.get('/currentorder', (req, res) => {
+    const sql = "select MAX(order_id) from orders";
     db.query(sql, (err, data) => {
         if (err) return res.json(err);
         return res.json(data);
