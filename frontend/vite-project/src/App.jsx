@@ -1,38 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect, Fragment } from 'react';
+import { Grid, Card, Box } from '@mui/material';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-  //fetch data
-  fetch("http://localhost:8081/product")
+  const [formData, setFormData] = useState('');
+  const [products,setProducts] = useState([]);
+  const [currentOrder,setCurrentOrder] = useState('');
+
+  useEffect(()=>{
+    //run only once when component mounts
+    fetch("http://localhost:8081/product")
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => setProducts(data["rows"]))
+    .catch((error) => console.error("database unavalible",error))
+  },[])
+
+  useEffect(()=>{
+    //run only once when component mounts
+    fetch("http://localhost:8081/currentorder")
+    .then(response => response.json())
+    .then(data => setCurrentOrder(data["rows"][0]["max"] + 1))
+    .catch((error) => console.error("database2 unavalible",error))
+  },[])
+
+  function handleChange(e){
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  
+  function handleSubmit(e){
+    //on submit send form input to backend
+    e.preventDefault();
+    fetch('http://localhost:8081/form',{
+      method:"POST",
+      headers:{'Content-type':'application/json'},
+      body:JSON.stringify(formData)
+    })
+    .then((response) => response.json())
+    .catch((error) => {console.error("error submitting form data",error)})
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Grid>
+      <h1>RussMasu</h1>
+      <h3>Transaction Entry</h3>
+      <label for="currentOrder">Transaction Number: {currentOrder}</label>
+      <form onSubmit={handleSubmit}>
+        {products.map((product)=>(
+          <div>
+            <label for ={product.product_id}>{product.product_name}: </label>
+            <br></br>
+            <input type="number" name={product.product_id} size="5" onChange={handleChange}/>
+          </div>
+        ))}
+        <input type="submit" value="Submit"/>
+      </form>
+    </Grid>
   )
 }
 
