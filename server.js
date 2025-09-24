@@ -43,7 +43,7 @@ app.get('/currentorder', (req, res) => {
     })
 });
 
-// get form data TODO santize inputs, look up sending data from react to express
+// TODO handle data
 app.post('/form',(req,res) =>{
     const data = req.body;
     console.log(data);

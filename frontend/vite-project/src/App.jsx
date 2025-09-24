@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Grid } from '@mui/material';
+import { useState, useEffect, Fragment } from 'react';
+import { Grid, Card, Box } from '@mui/material';
 import './App.css';
 
 function App() {
-  const [formData, setFormData] = useState('');//TODO change to formdata,setformdata
+  const [formData, setFormData] = useState('');
   const [products,setProducts] = useState([]);
   const [currentOrder,setCurrentOrder] = useState('');
 
@@ -40,18 +40,21 @@ function App() {
   };
 
   return (
-    <>
-      <label for="currentOrder">Order Number: {currentOrder}</label>
+    <Grid>
+      <h1>RussMasu</h1>
+      <h3>Transaction Entry</h3>
+      <label for="currentOrder">Transaction Number: {currentOrder}</label>
       <form onSubmit={handleSubmit}>
         {products.map((product)=>(
           <div>
-            <label for ={product.product_id}>{product.product_name}</label>
-            <input type="number" name={product.product_id} onChange={handleChange}/>
+            <label for ={product.product_id}>{product.product_name}: </label>
+            <br></br>
+            <input type="number" name={product.product_id} size="5" onChange={handleChange}/>
           </div>
         ))}
-        <input type="submit"/>
+        <input type="submit" value="Submit"/>
       </form>
-    </>
+    </Grid>
   )
 }
 

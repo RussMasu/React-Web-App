@@ -14,9 +14,6 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@mui/material": "^7.3.2",
     "body-parser": "^2.2.0",
     "concurrently": "^9.2.1",
     "cors": "^2.8.5",
