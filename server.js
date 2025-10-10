@@ -4,6 +4,7 @@ const express = require('express'); // Express framework for handling HTTP reque
 const pg = require('pg'); // pg client for Node.js
 const cors = require('cors'); // For web security
 const bodyParser = require('body-parser');
+import keys from '..keys.json';
 
 // Create an instance of express
 const app = express();
@@ -12,10 +13,10 @@ app.use(cors());
 
 // Create a connection to the PostgreSQL database
 const db = new pg.Pool({
-    host: "localhost",
-    user: "postgres",
-    password: "pass",
-    database: "postgres",
+    host: keys.host,
+    user: keys.user,
+    password: keys.password,
+    database: keys.database,
     port: 5432
 });
 
