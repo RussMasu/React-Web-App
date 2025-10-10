@@ -47,7 +47,6 @@ app.get('/currentorder', (req, res) => {
 // TODO handle data
 app.post('/form',(req,res) =>{
     const data = req.body;
-    console.log(data);
 })
 
 // Start the server and listen on port 8081

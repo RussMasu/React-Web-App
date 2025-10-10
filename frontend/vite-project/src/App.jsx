@@ -1,5 +1,5 @@
 import { useState, useEffect, Fragment } from 'react';
-import { Grid, Card, Box } from '@mui/material';
+import { Grid, AppBar, Button, Stack, Box, Container} from '@mui/material';
 import './App.css';
 
 function App() {
@@ -40,8 +40,23 @@ function App() {
   };
 
   return (
-    <Grid>
-      <h1>RussMasu</h1>
+    <>
+      <Box>
+        <Stack justifyContent="space-between" direction="row">
+          <Box>
+            <h1>RussMasu</h1>
+          </Box>
+          <Box>
+            <input type="text" value="search bar"></input>
+          </Box>
+        </Stack>
+      </Box>
+      <Box sx={{bgcolor:"#01579b"}}>
+        <Stack justifyContent="center" direction="row" spacing={20}>
+          <Button variant="text" sx={{color:"#ffffff"}}>Text</Button>
+          <Button variant="text" sx={{color:"#ffffff"}}>Text2</Button>
+        </Stack>
+      </Box>
       <h3>Transaction Entry</h3>
       <label for="currentOrder">Transaction Number: {currentOrder}</label>
       <form onSubmit={handleSubmit}>
@@ -54,7 +69,7 @@ function App() {
         ))}
         <input type="submit" value="Submit"/>
       </form>
-    </Grid>
+    </>
   )
 }
 
