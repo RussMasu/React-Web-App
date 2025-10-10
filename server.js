@@ -4,7 +4,7 @@ const express = require('express'); // Express framework for handling HTTP reque
 const pg = require('pg'); // pg client for Node.js
 const cors = require('cors'); // For web security
 const bodyParser = require('body-parser');
-import keys from '..keys.json';
+const keys = require('./keys.json');
 
 // Create an instance of express
 const app = express();
