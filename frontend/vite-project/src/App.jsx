@@ -1,6 +1,13 @@
 import { useState, useEffect, Fragment } from 'react';
 import { Grid, AppBar, Button, Stack, Box, Container} from '@mui/material';
 import './App.css';
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+} from "react-router";
+import Home from "./pages";
+import Weather from "./pages/weather";
 
 function App() {
   const [formData, setFormData] = useState('');
@@ -40,37 +47,17 @@ function App() {
   };
 
   return (
-    <>
-      <Box>
-        <Stack justifyContent="space-between" direction="row">
-          <Box>
-            <h1>RussMasu</h1>
-          </Box>
-          <Box>
-            <input type="text" value="search bar"></input>
-          </Box>
-        </Stack>
-      </Box>
-      <Box sx={{bgcolor:"#01579b"}}>
-        <Stack justifyContent="center" direction="row" spacing={20}>
-          <Button variant="text" sx={{color:"#ffffff"}}>Text</Button>
-          <Button variant="text" sx={{color:"#ffffff"}}>Text2</Button>
-        </Stack>
-      </Box>
-      <h3>Transaction Entry</h3>
-      <label for="currentOrder">Transaction Number: {currentOrder}</label>
-      <form onSubmit={handleSubmit}>
-        {products.map((product)=>(
-          <div>
-            <label for ={product.product_id}>{product.product_name}: </label>
-            <br></br>
-            <input type="number" name={product.product_id} size="5" onChange={handleChange}/>
-          </div>
-        ))}
-        <input type="submit" value="Submit"/>
-      </form>
-    </>
-  )
+    <Router>
+      <Stack justifyContent="center" direction="row" spacing={20}>
+        <a href="/">Home</a>
+        <a href="/weather">Weather</a>
+      </Stack>
+      <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/weather" element={<Weather />} />
+      </Routes>
+    </Router>  
+  );
 }
 
 export default App
