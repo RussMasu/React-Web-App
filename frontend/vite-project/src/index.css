@@ -14,9 +14,9 @@
 }
 
 a {
-  font-weight: bold;
-  font-size: 20px;
-  color: #ffffff;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000000;
   text-decoration: inherit;
 }
 a:hover {
@@ -28,6 +28,10 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+div.sticky{
+  position: sticky;
+  top:0;
+}
 h1 {
   color: #e28743;
   font-size: 3.2em;
@@ -35,10 +39,11 @@ h1 {
   margin: 35px;
 }
 h2{
-  margin: 35px;
+  margin-left: 35px;
+  margin-right: 35px;
 }
 p{
-  margin: 35px;
+  margin-left: 35px;
 }
 img{
   margin-top: 35px;
