@@ -1,5 +1,7 @@
-import { useState, useEffect, Fragment } from 'react';
-//TODO repair page
+import { useState, useEffect } from 'react';
+import { Stack, Box, Divider } from '@mui/material';
+import { grey } from '@mui/material/colors';
+//TODO add display total spent, prices
 
 const Weather = () => {
     const [formData, setFormData] = useState('');
@@ -13,11 +15,15 @@ const Weather = () => {
         .catch((error) => console.error("database unavalible",error))
     },[])
 
-    useEffect(()=>{//run only once when component mounts
+    function getCurrentOrder(){
         fetch("http://localhost:8081/currentorder")
         .then(response => response.json())
         .then(data => setCurrentOrder(data["rows"][0]["max"] + 1))
-        .catch((error) => console.error("database2 unavalible",error))
+        .catch((error) => console.error("error updating current order",error))
+    }
+
+    useEffect(()=>{//run only once when component mounts
+        getCurrentOrder();
     },[])
 
     function handleChange(e){
@@ -25,6 +31,7 @@ const Weather = () => {
     };
   
     function handleSubmit(e){ //on submit send form input to backend
+        console.log("submit");
         e.preventDefault();
         fetch('http://localhost:8081/form',{
             method:"POST",
@@ -33,22 +40,42 @@ const Weather = () => {
         })
         .then((response) => response.json())
         .catch((error) => {console.error("error submitting form data",error)})
+        //reset form
+        document.getElementById("orderForm").reset();
     };
+
     return (
-        <div>
-            <h3>Transaction Entry</h3>
-            <label for="currentOrder">Transaction Number: {currentOrder}</label>
-            <form onSubmit={handleSubmit}>
-                {products.map((product)=>(
-                <div>
-                    <label for ={product.product_id}>{product.product_name}: </label>
-                    <br></br>
-                    <input type="number" name={product.product_id} size="5" onChange={handleChange}/>
+        <>
+        <Box marginLeft="35px">
+        <h3>Order Form Application</h3>
+        <p>Retrieve current transaction number and input customer order data into DB</p>
+        </Box>
+        <Box display="flex" alignItems="center" justifyContent="center">
+        <Stack justifyContent="center" direction="row" alignItems="center" spacing={10} bgcolor="#cccccc" height="400px" width="100%">
+            <Box sx={{bgcolor:"#ffffff",width:"450px"}}>
+                <div className='center'>
+                <label for="currentOrder">Transaction Number: {currentOrder}</label>
+                <Box height="25px"></Box>
+                <form id="orderForm" onSubmit={handleSubmit}>
+                    {products.map((product)=>(
+                        <Stack justifyContent="space-between" direction="row" marginLeft="35px">
+                            <label for ={product.product_id}>{product.product_name}: </label>
+                            <input type="number" name={product.product_id} size="5" onChange={handleChange}/>
+                        </Stack>
+                    ))}
+                    <label className="comments" for="comments">Comments: </label>
+                    <input type="text" name="comments" size="30" onChange={handleChange}/>
+                    <input type="submit" name="submit" value="Submit" onClick={getCurrentOrder}/>
+                </form>
                 </div>
-                ))}
-                <input type="submit" value="Submit"/>
-            </form>
-        </div>
+            </Box>
+            <Box display="flex" justifyContent="center" sx={{bgcolor:"#ffffff", height:"300px",width:"450px"}}>
+                <h3>monthly income</h3>
+                <p>ITEM1 price</p>
+            </Box>
+        </Stack>
+        </Box>
+        </>
     );
 };
 

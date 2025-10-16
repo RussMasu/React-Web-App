@@ -1,5 +1,7 @@
 // server.js
 // Import required modules
+//todo change date in DB to date and time
+//todo refresh page after submit
 const express = require('express'); // Express framework for handling HTTP requests
 const pg = require('pg'); // pg client for Node.js
 const cors = require('cors'); // For web security
@@ -44,9 +46,35 @@ app.get('/currentorder', (req, res) => {
     })
 });
 
-// TODO handle data
-app.post('/form',(req,res) =>{
+app.post('/form',async (req,res) =>{//always submits second record - being called twice?
     const data = req.body;
+    const qcurrentOrderID = await db.query("select MAX(order_id) from orders");
+    const currentOrderID = qcurrentOrderID["rows"][0]["max"]+1;
+    const qproducts = await db.query("select * from product");
+    const products = qproducts["rows"];
+    const currDate = new Date().toLocaleString();
+    let total = 0;
+    const sql = "INSERT INTO orders (order_date,comments) VALUES('"+currDate+"','"+data.comments+"')";
+    db.query(sql, (err) => {
+        if (err) console.log(err);
+    })
+   const keys = Object.keys(data);;
+   for(let i=0;i<keys.length;i++){
+        if(keys[i]!= "comments"){
+            let quantity = data[keys[i]];
+            const sql2 = "INSERT INTO order_detail (order_id,product_id,quantity) VALUES('"+currentOrderID+"','"+keys[i]+"','"+quantity+"')";
+            if(quantity != ""){
+                total = total + parseInt(quantity) * products[i]["product_price"];
+                db.query(sql2, (err) => {
+                    if (err) console.log(err);
+                })
+            }
+        }
+        const sql3 = "UPDATE orders SET order_amount = '"+total+"' WHERE order_id = '"+currentOrderID+"'";
+        db.query(sql3, (err) => {
+            if (err) console.log(err);
+        })
+    }
 })
 
 // Start the server and listen on port 8081
