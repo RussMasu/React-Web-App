@@ -3,7 +3,7 @@ import { Divider, Stack, Box } from '@mui/material';
 import picTemple from '../assets/temple.jpg';
 import picHorse from '../assets/snowhorse.jpeg';
 import picAquarium from '../assets/aquarium-tunnel.jpg';
-//todo create logo
+//fix layout to display correctly on TV and on laptop
 
 const Home = () => {
     return (

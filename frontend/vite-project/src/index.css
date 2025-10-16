@@ -28,6 +28,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+div.center{
+    text-align: center;
+}
 div.sticky{
   position: sticky;
   top:0;
