@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack, Box } from '@mui/material';
+import { Stack, Box, Divider } from '@mui/material';
 import { grey } from '@mui/material/colors';
 //TODO add display total spent, prices
 
@@ -45,33 +45,37 @@ const Weather = () => {
     };
 
     return (
-        <div className='center'>
+        <>
+        <Box marginLeft="35px">
         <h3>Order Form Application</h3>
         <p>Retrieve current transaction number and input customer order data into DB</p>
-        <br></br>
-        <Stack justifyContent="center" direction="row" spacing={20} bgcolor="#cccccc">
-            <Box className='input component' sx={{bgcolor:"#ffffff"}}>
+        </Box>
+        <Box display="flex" alignItems="center" justifyContent="center">
+        <Stack justifyContent="center" direction="row" alignItems="center" spacing={10} bgcolor="#cccccc" height="400px" width="100%">
+            <Box sx={{bgcolor:"#ffffff",width:"450px"}}>
+                <div className='center'>
                 <label for="currentOrder">Transaction Number: {currentOrder}</label>
+                <Box height="25px"></Box>
                 <form id="orderForm" onSubmit={handleSubmit}>
                     {products.map((product)=>(
-                    <div>
-                        <Stack justifyContent="left" direction="row">
+                        <Stack justifyContent="space-between" direction="row" marginLeft="35px">
                             <label for ={product.product_id}>{product.product_name}: </label>
                             <input type="number" name={product.product_id} size="5" onChange={handleChange}/>
                         </Stack>
-                     </div>
                     ))}
-                    <label for="comments">Comments: </label>
-                    <input type="text" name="comments" size="40" onChange={handleChange}/>
-                    <br></br>
+                    <label className="comments" for="comments">Comments: </label>
+                    <input type="text" name="comments" size="30" onChange={handleChange}/>
                     <input type="submit" name="submit" value="Submit" onClick={getCurrentOrder}/>
                 </form>
+                </div>
             </Box>
-            <Box className='input component' sx={{bgcolor:"#ffffff"}}>
-                <h1>stuff here  </h1>
+            <Box display="flex" justifyContent="center" sx={{bgcolor:"#ffffff", height:"300px",width:"450px"}}>
+                <h3>monthly income</h3>
+                <p>ITEM1 price</p>
             </Box>
         </Stack>
-        </div>
+        </Box>
+        </>
     );
 };
 

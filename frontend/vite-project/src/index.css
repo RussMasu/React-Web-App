@@ -54,6 +54,10 @@ img{
 input{
   margin-left: 35px;
   margin-right: 35px;
+  margin-bottom: 5px;
+}
+label.comments{
+  margin-left: 15px;
 }
 button {
   border-radius: 8px;
