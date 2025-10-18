@@ -39,14 +39,14 @@ app.get('/product', (req, res) => {
 
 // Define a route to fetch current order number table
 app.get('/currentorder', (req, res) => {
-    const sql = "select MAX(order_id) from orders";
+    const sql = "select MAX(order_id),SUM(order_amount) from orders";
     db.query(sql, (err, data) => {
         if (err) return res.json(err);
         return res.json(data);
     })
 });
 
-app.post('/form',async (req,res) =>{//always submits second record - being called twice?
+app.post('/form',async (req,res) =>{
     const data = req.body;
     const qcurrentOrderID = await db.query("select MAX(order_id) from orders");
     const currentOrderID = qcurrentOrderID["rows"][0]["max"]+1;

@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Stack, Box, Divider } from '@mui/material';
 import { grey } from '@mui/material/colors';
-//TODO add display total spent, prices
 
 const Weather = () => {
     const [formData, setFormData] = useState('');
     const [products,setProducts] = useState([]);
     const [currentOrder,setCurrentOrder] = useState('');
+    const [totalIncome,setTotalIncome] = useState('');
 
     useEffect(()=>{ //run only once when component mounts
         fetch("http://localhost:8081/product")
@@ -18,7 +18,10 @@ const Weather = () => {
     function getCurrentOrder(){
         fetch("http://localhost:8081/currentorder")
         .then(response => response.json())
-        .then(data => setCurrentOrder(data["rows"][0]["max"] + 1))
+        .then(data => 
+            {setCurrentOrder(data["rows"][0]["max"] + 1);
+            setTotalIncome(data["rows"][0]["sum"])}
+        )
         .catch((error) => console.error("error updating current order",error))
     }
 
@@ -51,7 +54,7 @@ const Weather = () => {
         <p>Retrieve current transaction number and input customer order data into DB</p>
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center">
-        <Stack justifyContent="center" direction="row" alignItems="center" spacing={10} bgcolor="#cccccc" height="400px" width="100%">
+        <Stack justifyContent="center" direction="row" alignItems="center" spacing={5} bgcolor="#cccccc" height="400px" width="100%">
             <Box sx={{bgcolor:"#ffffff",width:"450px"}}>
                 <div className='center'>
                 <label for="currentOrder">Transaction Number: {currentOrder}</label>
@@ -69,9 +72,13 @@ const Weather = () => {
                 </form>
                 </div>
             </Box>
-            <Box display="flex" justifyContent="center" sx={{bgcolor:"#ffffff", height:"300px",width:"450px"}}>
-                <h3>monthly income</h3>
-                <p>ITEM1 price</p>
+            <Box display="flex" justifyContent="center" sx={{bgcolor:"#ffffff", height:"180px",width:"250px"}}>
+                <div>
+                    <p>Total Income: ${totalIncome}</p>
+                    {products.map((product)=>(
+                        <p>{product.product_name}: ${product.product_price}</p>
+                    ))}
+                </div>
             </Box>
         </Stack>
         </Box>
