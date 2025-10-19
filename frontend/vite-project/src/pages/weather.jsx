@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Stack, Box, Divider } from '@mui/material';
 import { grey } from '@mui/material/colors';
-
+//TODO order_id 92 not present in orders, issue first entry not accepted on load -- normal behavior for all others
+//TODO fix issue with '' in comment
 const Weather = () => {
     const [formData, setFormData] = useState('');
     const [products,setProducts] = useState([]);
@@ -45,6 +46,7 @@ const Weather = () => {
         .catch((error) => {console.error("error submitting form data",error)})
         //reset form
         document.getElementById("orderForm").reset();
+        getCurrentOrder();
     };
 
     return (
@@ -68,7 +70,7 @@ const Weather = () => {
                     ))}
                     <label className="comments" for="comments">Comments: </label>
                     <input type="text" name="comments" size="30" onChange={handleChange}/>
-                    <input type="submit" name="submit" value="Submit" onClick={getCurrentOrder}/>
+                    <input type="submit" name="submit" value="Submit"/>
                 </form>
                 </div>
             </Box>

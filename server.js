@@ -1,7 +1,6 @@
 // server.js
 // Import required modules
-//todo change date in DB to date and time
-//todo refresh page after submit
+
 const express = require('express'); // Express framework for handling HTTP requests
 const pg = require('pg'); // pg client for Node.js
 const cors = require('cors'); // For web security
@@ -50,30 +49,26 @@ app.post('/form',async (req,res) =>{
     const data = req.body;
     const qcurrentOrderID = await db.query("select MAX(order_id) from orders");
     const currentOrderID = qcurrentOrderID["rows"][0]["max"]+1;
+    console.log(currentOrderID);
     const qproducts = await db.query("select * from product");
     const products = qproducts["rows"];
     const currDate = new Date().toLocaleString();
     let total = 0;
     const sql = "INSERT INTO orders (order_date,comments) VALUES('"+currDate+"','"+data.comments+"')";
-    db.query(sql, (err) => {
-        if (err) console.log(err);
-    })
-   const keys = Object.keys(data);;
-   for(let i=0;i<keys.length;i++){
+    const insertQuery = await db.query(sql);
+    const keys = Object.keys(data);
+    for(let i=0;i<keys.length;i++){
         if(keys[i]!= "comments"){
             let quantity = data[keys[i]];
+            //todo here issue latest key not being detected
             const sql2 = "INSERT INTO order_detail (order_id,product_id,quantity) VALUES('"+currentOrderID+"','"+keys[i]+"','"+quantity+"')";
             if(quantity != ""){
                 total = total + parseInt(quantity) * products[i]["product_price"];
-                db.query(sql2, (err) => {
-                    if (err) console.log(err);
-                })
+                const insertQuery2 = await db.query(sql2);
             }
         }
         const sql3 = "UPDATE orders SET order_amount = '"+total+"' WHERE order_id = '"+currentOrderID+"'";
-        db.query(sql3, (err) => {
-            if (err) console.log(err);
-        })
+        const updateQuery = await db.query(sql3)
     }
 })
 
