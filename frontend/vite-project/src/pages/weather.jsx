@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Stack, Box, Divider } from '@mui/material';
 
-//TODO validate user input client side orders must be under 100
+//TODO add monthly income
 const Weather = () => {
     const [formData, setFormData] = useState('');
     const [products,setProducts] = useState([]);
@@ -45,7 +45,7 @@ const Weather = () => {
             document.getElementById(errorLabel).innerText = ""
             if(document.getElementById(formInput).value > 100){
                 isValid = false;
-                document.getElementById(errorLabel).innerText = "Enter value 100 or less"
+                document.getElementById(errorLabel).innerText = "Order amount must be 100 or less"
             }
         })
         //submit form
@@ -75,20 +75,21 @@ const Weather = () => {
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center">
         <Stack justifyContent="center" direction="row" alignItems="center" spacing={5} bgcolor="#cccccc" height="400px" width="100%">
-            <Box sx={{bgcolor:"#ffffff",width:"450px"}}>
+            <Box sx={{bgcolor:"#ffffff",width:"350px"}}>
                 <div className='center'>
                 <label for="currentOrder">Transaction Number: {currentOrder}</label>
                 <Box height="25px"></Box>
                 <form id="orderForm" onSubmit={handleSubmit}>
                     {products.map((product)=>(
-                        <Stack justifyContent="space-between" direction="row" marginLeft="35px">
-                            <label for ={product.product_id}>{product.product_name}: </label>
+                        <Stack justifyContent="space-even" direction="row" marginLeft="35px">
+                            <label for ={product.product_id} className="orderAmount">{product.product_name}: </label>
                             <input type="number" name={product.product_id} id={product.product_id + "-input"} size="5" onChange={handleChange}/>
                             <label id={product.product_id + "-error"} className="error"></label>
                         </Stack>
                     ))}
                     <label className="comments" for="comments">Comments: </label>
                     <input type="text" name="comments" size="30" onChange={handleChange}/>
+                    <br></br>
                     <input type="submit" name="submit" value="Submit"/>
                 </form>
                 </div>
