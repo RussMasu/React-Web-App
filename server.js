@@ -52,8 +52,12 @@ app.post('/form',async (req,res) =>{
     const qproducts = await db.query("select * from product");
     const products = qproducts["rows"];
     const currDate = new Date().toLocaleString();
+    let santiziedComments = data.comments;
+    if(data.comments){
+        santiziedComments = encodeURIComponent(data.comments.replaceAll("'",""));
+    }
     let total = 0;
-    const sql = "INSERT INTO orders (order_date,comments) VALUES('"+currDate+"','"+data.comments+"')";
+    const sql = "INSERT INTO orders (order_date,comments) VALUES('"+currDate+"','"+santiziedComments+"')";
     const insertQuery = await db.query(sql);
     const keys = Object.keys(data);
     for(let i=0;i<keys.length;i++){

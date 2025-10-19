@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Stack, Box, Divider } from '@mui/material';
 
-//TODO fix issue with '' in comment
+//TODO validate user input client side orders must be under 100
 const Weather = () => {
     const [formData, setFormData] = useState('');
     const [products,setProducts] = useState([]);
