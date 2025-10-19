@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Stack, Box, Divider } from '@mui/material';
-import { grey } from '@mui/material/colors';
-//TODO order_id 92 not present in orders, issue first entry not accepted on load -- normal behavior for all others
+
 //TODO fix issue with '' in comment
 const Weather = () => {
     const [formData, setFormData] = useState('');
@@ -19,11 +18,13 @@ const Weather = () => {
     function getCurrentOrder(){
         fetch("http://localhost:8081/currentorder")
         .then(response => response.json())
-        .then(data => 
-            {setCurrentOrder(data["rows"][0]["max"] + 1);
-            setTotalIncome(data["rows"][0]["sum"])}
-        )
+        .then(data => {
+            let nextOrder = data["rows"][0]["max"] + 1;
+            setCurrentOrder(nextOrder);
+            setTotalIncome(data["rows"][0]["sum"]);
+        })
         .catch((error) => console.error("error updating current order",error))
+        
     }
 
     useEffect(()=>{//run only once when component mounts
@@ -35,19 +36,21 @@ const Weather = () => {
     };
   
     function handleSubmit(e){ //on submit send form input to backend
-        console.log("submit");
         e.preventDefault();
         fetch('http://localhost:8081/form',{
             method:"POST",
             headers:{'Content-type':'application/json'},
             body:JSON.stringify(formData)
         })
-        .then((response) => response.json())
-        .catch((error) => {console.error("error submitting form data",error)})
+        .then((response) => {return response.json()})
+        .then(data => {
+            let nextOrder = data["rows"][0]["max"] + 1;
+            setCurrentOrder(nextOrder);
+            setTotalIncome(data["rows"][0]["sum"]);
+        });
         //reset form
         document.getElementById("orderForm").reset();
-        getCurrentOrder();
-    };
+        };
 
     return (
         <>

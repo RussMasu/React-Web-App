@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Create a connection to the PostgreSQL database
-const db = new pg.Pool({
+const db = new pg.Pool  ({
     host: keys.host,
     user: keys.user,
     password: keys.password,
@@ -49,7 +49,6 @@ app.post('/form',async (req,res) =>{
     const data = req.body;
     const qcurrentOrderID = await db.query("select MAX(order_id) from orders");
     const currentOrderID = qcurrentOrderID["rows"][0]["max"]+1;
-    console.log(currentOrderID);
     const qproducts = await db.query("select * from product");
     const products = qproducts["rows"];
     const currDate = new Date().toLocaleString();
@@ -68,8 +67,12 @@ app.post('/form',async (req,res) =>{
             }
         }
         const sql3 = "UPDATE orders SET order_amount = '"+total+"' WHERE order_id = '"+currentOrderID+"'";
-        const updateQuery = await db.query(sql3)
+        const updateQuery = await db.query(sql3);
     }
+    db.query("select MAX(order_id),SUM(order_amount) from orders", (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    })
 })
 
 // Start the server and listen on port 8081
