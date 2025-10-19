@@ -59,6 +59,9 @@ input{
 label.comments{
   margin-left: 15px;
 }
+label.error{
+  color:#ff0000
+}
 button {
   border-radius: 8px;
   border: 1px solid transparent;

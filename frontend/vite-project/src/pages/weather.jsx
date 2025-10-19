@@ -37,19 +37,34 @@ const Weather = () => {
   
     function handleSubmit(e){ //on submit send form input to backend
         e.preventDefault();
-        fetch('http://localhost:8081/form',{
-            method:"POST",
-            headers:{'Content-type':'application/json'},
-            body:JSON.stringify(formData)
+        //validate form
+        let isValid = true;
+        products.forEach((product) => {
+            let formInput = product.product_id + "-input";
+            let errorLabel = product.product_id + "-error";
+            document.getElementById(errorLabel).innerText = ""
+            if(document.getElementById(formInput).value > 100){
+                isValid = false;
+                document.getElementById(errorLabel).innerText = "Enter value 100 or less"
+            }
         })
-        .then((response) => {return response.json()})
-        .then(data => {
-            let nextOrder = data["rows"][0]["max"] + 1;
-            setCurrentOrder(nextOrder);
-            setTotalIncome(data["rows"][0]["sum"]);
-        });
-        //reset form
-        document.getElementById("orderForm").reset();
+        //submit form
+        if(isValid){
+            fetch('http://localhost:8081/form',{
+                method:"POST",
+                headers:{'Content-type':'application/json'},
+                body:JSON.stringify(formData)
+            })
+            .then((response) => {return response.json()})
+            .then(data => {
+                let nextOrder = data["rows"][0]["max"] + 1;
+                setCurrentOrder(nextOrder);
+                setTotalIncome(data["rows"][0]["sum"]);
+            });
+        
+            //reset form
+            document.getElementById("orderForm").reset();
+        }
         };
 
     return (
@@ -68,7 +83,8 @@ const Weather = () => {
                     {products.map((product)=>(
                         <Stack justifyContent="space-between" direction="row" marginLeft="35px">
                             <label for ={product.product_id}>{product.product_name}: </label>
-                            <input type="number" name={product.product_id} size="5" onChange={handleChange}/>
+                            <input type="number" name={product.product_id} id={product.product_id + "-input"} size="5" onChange={handleChange}/>
+                            <label id={product.product_id + "-error"} className="error"></label>
                         </Stack>
                     ))}
                     <label className="comments" for="comments">Comments: </label>
