@@ -1,7 +1,6 @@
 // server.js
 // Import required modules
-//todo change date in DB to date and time
-//todo refresh page after submit
+
 const express = require('express'); // Express framework for handling HTTP requests
 const pg = require('pg'); // pg client for Node.js
 const cors = require('cors'); // For web security
@@ -14,7 +13,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Create a connection to the PostgreSQL database
-const db = new pg.Pool({
+const db = new pg.Pool  ({
     host: keys.host,
     user: keys.user,
     password: keys.password,
@@ -39,42 +38,45 @@ app.get('/product', (req, res) => {
 
 // Define a route to fetch current order number table
 app.get('/currentorder', (req, res) => {
-    const sql = "select MAX(order_id) from orders";
+    const sql = "select MAX(order_id),SUM(order_amount) from orders";
     db.query(sql, (err, data) => {
         if (err) return res.json(err);
         return res.json(data);
     })
 });
 
-app.post('/form',async (req,res) =>{//always submits second record - being called twice?
+app.post('/form',async (req,res) =>{
     const data = req.body;
     const qcurrentOrderID = await db.query("select MAX(order_id) from orders");
     const currentOrderID = qcurrentOrderID["rows"][0]["max"]+1;
     const qproducts = await db.query("select * from product");
     const products = qproducts["rows"];
     const currDate = new Date().toLocaleString();
+    let santiziedComments = data.comments;
+    if(data.comments){
+        santiziedComments = encodeURIComponent(data.comments.replaceAll("'",""));
+    }
     let total = 0;
-    const sql = "INSERT INTO orders (order_date,comments) VALUES('"+currDate+"','"+data.comments+"')";
-    db.query(sql, (err) => {
-        if (err) console.log(err);
-    })
-   const keys = Object.keys(data);;
-   for(let i=0;i<keys.length;i++){
+    const sql = "INSERT INTO orders (order_date,comments) VALUES('"+currDate+"','"+santiziedComments+"')";
+    const insertQuery = await db.query(sql);
+    const keys = Object.keys(data);
+    for(let i=0;i<keys.length;i++){
         if(keys[i]!= "comments"){
             let quantity = data[keys[i]];
+            //todo here issue latest key not being detected
             const sql2 = "INSERT INTO order_detail (order_id,product_id,quantity) VALUES('"+currentOrderID+"','"+keys[i]+"','"+quantity+"')";
             if(quantity != ""){
                 total = total + parseInt(quantity) * products[i]["product_price"];
-                db.query(sql2, (err) => {
-                    if (err) console.log(err);
-                })
+                const insertQuery2 = await db.query(sql2);
             }
         }
         const sql3 = "UPDATE orders SET order_amount = '"+total+"' WHERE order_id = '"+currentOrderID+"'";
-        db.query(sql3, (err) => {
-            if (err) console.log(err);
-        })
+        const updateQuery = await db.query(sql3);
     }
+    db.query("select MAX(order_id),SUM(order_amount) from orders", (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    })
 })
 
 // Start the server and listen on port 8081

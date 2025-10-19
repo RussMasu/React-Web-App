@@ -52,12 +52,17 @@ img{
   margin-top: 35px;
 }
 input{
-  margin-left: 35px;
-  margin-right: 35px;
   margin-bottom: 5px;
+  margin-left: 5px;
+}
+label.orderAmount{
+  width: 150px; 
 }
 label.comments{
-  margin-left: 15px;
+  width: 150px; 
+}
+label.error{
+  color:#ff0000
 }
 button {
   border-radius: 8px;
