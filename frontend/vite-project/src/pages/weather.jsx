@@ -74,7 +74,7 @@ const Weather = () => {
         <p>Retrieve current transaction number and input customer order data into DB</p>
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center">
-        <Stack justifyContent="center" direction="row" alignItems="center" spacing={5} bgcolor="#cccccc" height="400px" width="100%">
+        <Stack justifyContent="center" direction={{xs:"column",md:"row"}} alignItems="center" spacing={5} bgcolor="#cccccc" height={{xs:"500px",md:"350px"}} width="100%">
             <Box sx={{bgcolor:"#ffffff",width:"350px"}}>
                 <div className='center'>
                 <label for="currentOrder">Transaction Number: {currentOrder}</label>
