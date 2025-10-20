@@ -8,7 +8,7 @@ import {
     Link
 } from "react-router";
 import Home from "./pages";
-import Weather from "./pages/weather";
+import AppPage from "./pages/applications";
 import picLogo from './assets/logo.png';
 
 function App() {
@@ -20,14 +20,14 @@ function App() {
       </Stack>
       <Stack justifyContent="center" direction="row" spacing={{xs:5,md:20}} sx={{bgcolor:"#01579b", height:"70px"}}>
         <Button component={Link} to="/" sx={{fontSize:"18px", color:"#ffffff"}}>Page Templates</Button>
-        <Button component={Link} to="/weather"sx={{fontSize:"18px",color:"#ffffff"}}>Applications</Button>
+        <Button component={Link} to="/applications"sx={{fontSize:"18px",color:"#ffffff"}}>Applications</Button>
       </Stack>
       <Box alignContent="center" sx={{bgcolor:"#fffcc9"}}>
         <p>This website was created by RussMasu using React and Node.js</p>
       </Box>
       <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route path="/weather" element={<Weather />} />
+          <Route path="/applications" element={<AppPage />} />
       </Routes>
     </Router>  
   );
