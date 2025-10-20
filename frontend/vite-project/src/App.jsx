@@ -22,7 +22,7 @@ function App() {
         <Button component={Link} to="/" sx={{fontSize:"18px", color:"#ffffff"}}>Page Templates</Button>
         <Button component={Link} to="/weather"sx={{fontSize:"18px",color:"#ffffff"}}>Applications</Button>
       </Stack>
-      <Box alignContent="center">
+      <Box alignContent="center" sx={{bgcolor:"#fffcc9"}}>
         <p>This website was created by RussMasu using React and Node.js</p>
       </Box>
       <Routes>
