@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Stack, Box, Divider } from '@mui/material';
 
 //TODO add monthly income
-const Weather = () => {
+const AppPage = () => {
     const [formData, setFormData] = useState('');
     const [products,setProducts] = useState([]);
     const [currentOrder,setCurrentOrder] = useState('');
@@ -108,4 +108,4 @@ const Weather = () => {
     );
 };
 
-export default Weather;
+export default AppPage;

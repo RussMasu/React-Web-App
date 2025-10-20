@@ -3,7 +3,6 @@ import { Divider, Stack, Box } from '@mui/material';
 import picTemple from '../assets/temple.jpg';
 import picHorse from '../assets/snowhorse.jpeg';
 import picAquarium from '../assets/aquarium-tunnel.jpg';
-//fix layout to display correctly on desktop and mobile
 
 const Home = () => {
     return (
