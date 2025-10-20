@@ -18,7 +18,7 @@ function App() {
         <img src={picLogo} alt='RussMasu logo' width="450" height="150"/>
         <Box alignContent="center"><input value="search bar"></input></Box>
       </Stack>
-      <Stack justifyContent="center" direction="row" spacing={20} sx={{bgcolor:"#01579b", height:"70px"}}>
+      <Stack justifyContent="center" direction="row" spacing={{xs:5,md:20}} sx={{bgcolor:"#01579b", height:"70px"}}>
         <Button component={Link} to="/" sx={{fontSize:"18px", color:"#ffffff"}}>Page Templates</Button>
         <Button component={Link} to="/weather"sx={{fontSize:"18px",color:"#ffffff"}}>Applications</Button>
       </Stack>
