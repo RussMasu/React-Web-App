@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Stack, Box, Divider } from '@mui/material';
+import { Stack, Box } from '@mui/material';
+//todo fix issue with sending blank data with no fields filled in  
 
-//TODO add monthly income
 const AppPage = () => {
     const [formData, setFormData] = useState('');
     const [products,setProducts] = useState([]);
     const [currentOrder,setCurrentOrder] = useState('');
     const [totalIncome,setTotalIncome] = useState('');
+    const [monthlyIncome,setMonthlyIncome] = useState('');
 
     useEffect(()=>{ //run only once when component mounts
         fetch("http://localhost:8081/product")
@@ -15,16 +16,18 @@ const AppPage = () => {
         .catch((error) => console.error("database unavalible",error))
     },[])
 
+    function updateData(data){
+        let nextOrder = data["rows"][0]["max"] + 1;
+        setCurrentOrder(nextOrder);
+        setTotalIncome(data["rows"][0]["total_sum"]);
+        setMonthlyIncome(data["rows"][0]["month_sum"]);
+    }
+
     function getCurrentOrder(){
         fetch("http://localhost:8081/currentorder")
         .then(response => response.json())
-        .then(data => {
-            let nextOrder = data["rows"][0]["max"] + 1;
-            setCurrentOrder(nextOrder);
-            setTotalIncome(data["rows"][0]["sum"]);
-        })
+        .then(data => updateData(data))
         .catch((error) => console.error("error updating current order",error))
-        
     }
 
     useEffect(()=>{//run only once when component mounts
@@ -39,6 +42,7 @@ const AppPage = () => {
         e.preventDefault();
         //validate form
         let isValid = true;
+        let hasOrder = false;
         products.forEach((product) => {
             let formInput = product.product_id + "-input";
             let errorLabel = product.product_id + "-error";
@@ -47,25 +51,23 @@ const AppPage = () => {
                 isValid = false;
                 document.getElementById(errorLabel).innerText = "Order amount must be 100 or less"
             }
+            if(document.getElementById(formInput).value >= 1 || document.getElementById(formInput).value <= 1){
+                hasOrder = true;
+            }
         })
         //submit form
-        if(isValid){
+        if(isValid && hasOrder){
             fetch('http://localhost:8081/form',{
                 method:"POST",
                 headers:{'Content-type':'application/json'},
                 body:JSON.stringify(formData)
             })
             .then((response) => {return response.json()})
-            .then(data => {
-                let nextOrder = data["rows"][0]["max"] + 1;
-                setCurrentOrder(nextOrder);
-                setTotalIncome(data["rows"][0]["sum"]);
-            });
-        
+            .then(data => updateData(data));
             //reset form
             document.getElementById("orderForm").reset();
         }
-        };
+    };
 
     return (
         <>
@@ -94,9 +96,10 @@ const AppPage = () => {
                 </form>
                 </div>
             </Box>
-            <Box display="flex" justifyContent="center" sx={{bgcolor:"#ffffff", height:"180px",width:"250px"}}>
+            <Box display="flex" justifyContent="center" sx={{bgcolor:"#ffffff", height:"220px",width:"250px"}}>
                 <div>
                     <p>Total Income: ${totalIncome}</p>
+                    <p>Monthly Income: ${monthlyIncome}</p>
                     {products.map((product)=>(
                         <p>{product.product_name}: ${product.product_price}</p>
                     ))}
