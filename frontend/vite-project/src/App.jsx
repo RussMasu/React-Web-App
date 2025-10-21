@@ -1,5 +1,4 @@
-import { useState, useEffect, Fragment } from 'react';
-import { Grid, AppBar, Button, Stack, Box, Container} from '@mui/material';
+import { Button, Stack, Box} from '@mui/material';
 import './App.css';
 import {
     BrowserRouter as Router,
@@ -14,9 +13,8 @@ import picLogo from './assets/logo.png';
 function App() {
   return (
     <Router>
-      <Stack justifyContent="space-between" direction="row" spacing={20}>
-        <img src={picLogo} alt='RussMasu logo' width="450" height="150"/>
-        <Box alignContent="center"><input value="search bar"></input></Box>
+      <Stack justifyContent="center" direction="row" spacing={20}>
+        <img src={picLogo} alt='RussMasu logo' width="450" height="100%"/>
       </Stack>
       <Stack justifyContent="center" direction="row" spacing={{xs:5,md:20}} sx={{bgcolor:"#01579b", height:"70px"}}>
         <Button component={Link} to="/" sx={{fontSize:"18px", color:"#ffffff"}}>Page Templates</Button>

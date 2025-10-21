@@ -38,7 +38,7 @@ app.get('/product', (req, res) => {
 
 // Define a route to fetch current order number table
 app.get('/currentorder', (req, res) => {
-    const sql = "select MAX(order_id),SUM(order_amount) from orders";
+    const sql = "SELECT MAX(max_order) OVER(),month_sum,SUM(month_sum) OVER() AS total_sum,mm, yyyy FROM (SELECT MAX(order_id) AS max_order,SUM(order_amount) AS month_sum,DATE_PART('month',order_date) AS mm, DATE_PART('year',order_date) AS yyyy from orders GROUP BY DATE_PART('month',order_date),DATE_PART('year',order_date)) AS q1";
     db.query(sql, (err, data) => {
         if (err) return res.json(err);
         return res.json(data);
@@ -73,7 +73,8 @@ app.post('/form',async (req,res) =>{
         const sql3 = "UPDATE orders SET order_amount = '"+total+"' WHERE order_id = '"+currentOrderID+"'";
         const updateQuery = await db.query(sql3);
     }
-    db.query("select MAX(order_id),SUM(order_amount) from orders", (err, data) => {
+    db.query("SELECT MAX(max_order) OVER(),month_sum,SUM(month_sum) OVER() AS total_sum,mm, yyyy FROM (SELECT MAX(order_id) AS max_order,SUM(order_amount) AS month_sum,DATE_PART('month',order_date) AS mm, DATE_PART('year',order_date) AS yyyy from orders GROUP BY DATE_PART('month',order_date),DATE_PART('year',order_date)) AS q1",
+        (err, data) => {
         if (err) return res.json(err);
         return res.json(data);
     })

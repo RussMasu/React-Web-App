@@ -1,4 +1,3 @@
-import React from "react";
 import { Divider, Stack, Box } from '@mui/material';
 import picTemple from '../assets/temple.jpg';
 import picHorse from '../assets/snowhorse.jpeg';
