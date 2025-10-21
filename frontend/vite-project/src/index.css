@@ -29,7 +29,7 @@ body {
   min-height: 100vh;
 }
 div.center{
-    text-align: center;
+  text-align: center;
 }
 div.sticky{
   position: sticky;
