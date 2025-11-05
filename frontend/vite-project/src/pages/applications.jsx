@@ -10,8 +10,13 @@ const AppPage = () => {
     const [monthlyIncome,setMonthlyIncome] = useState('');
 
     useEffect(()=>{ //run only once when component mounts
-        fetch("http://localhost:8081/product")
-        .then(response => response.json())
+        fetch("http://localhost:8080/product")
+        .then(response => {
+            if (response.ok){
+                response.json()
+            }
+            throw new Error("Response status not ok")
+        })
         .then(data => setProducts(data["rows"]))
         .catch((error) => console.error("database unavalible",error))
     },[])
@@ -24,10 +29,15 @@ const AppPage = () => {
     }
 
     function getCurrentOrder(){
-        fetch("http://localhost:8081/currentorder")
-        .then(response => response.json())
+        fetch("http://localhost:8080/currentorder")
+        .then(response => {
+            if (response.ok){
+                response.json()
+            }
+            throw new Error("Response status not ok")
+        })
         .then(data => updateData(data))
-        .catch((error) => console.error("error updating current order",error))
+        .catch((error) => console.error("database unavalible",error))
     }
 
     useEffect(()=>{//run only once when component mounts
@@ -57,7 +67,7 @@ const AppPage = () => {
         })
         //submit form
         if(isValid && hasOrder){
-            fetch('http://localhost:8081/form',{
+            fetch('http://localhost:8080/form',{
                 method:"POST",
                 headers:{'Content-type':'application/json'},
                 body:JSON.stringify(formData)

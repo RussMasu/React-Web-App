@@ -11,14 +11,14 @@ const keys = require('./keys.json');
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
-
+app.use(express.static('dist'));  //serve static files in dist dir
 // Create a connection to the PostgreSQL database
 const db = new pg.Pool  ({
     host: keys.host,
     user: keys.user,
     password: keys.password,
     database: keys.database,
-    port: 5432
+    port: keys.port
 });
 
 // Define a route for the root URL '/'
@@ -80,7 +80,7 @@ app.post('/form',async (req,res) =>{
     })
 })
 
-// Start the server and listen on port 8081
-app.listen(8081, () => {
+// Start the server and listen on port 8080
+app.listen(8080, () => {
     console.log("listening");
 });
