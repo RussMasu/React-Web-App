@@ -11,32 +11,26 @@ const AppPage = () => {
 
     useEffect(()=>{ //run only once when component mounts
         fetch("http://localhost:8080/product")
-        .then(response => {
-            if (response.ok){
-                response.json()
-            }
-            throw new Error("Response status not ok")
+        .then(response => response.json())
+        .then(data => {
+            setProducts(data);      
         })
-        .then(data => setProducts(data["rows"]))
         .catch((error) => console.error("database unavalible",error))
     },[])
 
     function updateData(data){
-        let nextOrder = data["rows"][0]["max"] + 1;
+        let nextOrder = data[0]["max"] + 1;
         setCurrentOrder(nextOrder);
-        setTotalIncome(data["rows"][0]["total_sum"]);
-        setMonthlyIncome(data["rows"][0]["month_sum"]);
+        setTotalIncome(data[0]["total_sum"]);
+        setMonthlyIncome(data[0]["month_sum"]);
     }
 
     function getCurrentOrder(){
         fetch("http://localhost:8080/currentorder")
-        .then(response => {
-            if (response.ok){
-                response.json()
-            }
-            throw new Error("Response status not ok")
+        .then(response => response.json())
+        .then(data => {
+            updateData(data);
         })
-        .then(data => updateData(data))
         .catch((error) => console.error("database unavalible",error))
     }
 
@@ -72,8 +66,10 @@ const AppPage = () => {
                 headers:{'Content-type':'application/json'},
                 body:JSON.stringify(formData)
             })
-            .then((response) => {return response.json()})
-            .then(data => updateData(data));
+            .then((response) =>  response.json())
+            .then(data => {
+                updateData(data["rows"]);
+            })
             //reset form
             document.getElementById("orderForm").reset();
         }
@@ -106,7 +102,7 @@ const AppPage = () => {
                 </form>
                 </div>
             </Box>
-            <Box display="flex" justifyContent="center" sx={{bgcolor:"#ffffff", height:"220px",width:"250px"}}>
+            <Box display="flex" justifyContent="center" alignItems="center" sx={{bgcolor:"#ffffff", height:"330px",width:"300px"}}>
                 <div>
                     <p>Total Income: ${totalIncome}</p>
                     <p>Monthly Income: ${monthlyIncome}</p>
