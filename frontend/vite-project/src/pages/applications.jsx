@@ -12,21 +12,36 @@ const AppPage = () => {
     useEffect(()=>{ //run only once when component mounts
         fetch("http://localhost:8080/product")
         .then(response => response.json())
-        .then(data => setProducts(data["rows"]))
+        .then(data => {
+            if(data["name"] != "error"){
+                setProducts(data["rows"])
+            }
+            else{
+                console.log(data);
+            }        
+        })
         .catch((error) => console.error("database unavalible",error))
     },[])
 
     function updateData(data){
-        let nextOrder = data["rows"][0]["max"] + 1;
+        let nextOrder = data[0]["max"] + 1;
         setCurrentOrder(nextOrder);
-        setTotalIncome(data["rows"][0]["total_sum"]);
-        setMonthlyIncome(data["rows"][0]["month_sum"]);
+        setTotalIncome(data[0]["total_sum"]);
+        setMonthlyIncome(data[0]["month_sum"]);
     }
 
     function getCurrentOrder(){
         fetch("http://localhost:8080/currentorder")
         .then(response => response.json())
-        .then(data => updateData(data))
+        .then(data => {
+            console.log(data);
+            if(data["name"] != "error"){
+                updateData(data["rows"])
+            }
+            else{
+                console.log(data);
+            }        
+        })
         .catch((error) => console.error("database unavalible",error))
     }
 
@@ -62,8 +77,15 @@ const AppPage = () => {
                 headers:{'Content-type':'application/json'},
                 body:JSON.stringify(formData)
             })
-            .then((response) => {return response.json()})
-            .then(data => updateData(data));
+            .then((response) =>  response.json())
+            .then(data => {
+                if(data["name"] != "error"){
+                    updateData(data["rows"])
+                }
+                else{
+                    console.log(data);
+                }        
+            })
             //reset form
             document.getElementById("orderForm").reset();
         }
