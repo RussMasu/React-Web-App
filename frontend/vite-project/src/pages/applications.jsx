@@ -11,12 +11,7 @@ const AppPage = () => {
 
     useEffect(()=>{ //run only once when component mounts
         fetch("http://localhost:8080/product")
-        .then(response => {
-            if (response.ok){
-                response.json()
-            }
-            throw new Error("Response status not ok")
-        })
+        .then(response => response.json())
         .then(data => setProducts(data["rows"]))
         .catch((error) => console.error("database unavalible",error))
     },[])
@@ -30,12 +25,7 @@ const AppPage = () => {
 
     function getCurrentOrder(){
         fetch("http://localhost:8080/currentorder")
-        .then(response => {
-            if (response.ok){
-                response.json()
-            }
-            throw new Error("Response status not ok")
-        })
+        .then(response => response.json())
         .then(data => updateData(data))
         .catch((error) => console.error("database unavalible",error))
     }
