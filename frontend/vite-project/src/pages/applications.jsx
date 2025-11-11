@@ -13,12 +13,7 @@ const AppPage = () => {
         fetch("http://localhost:8080/product")
         .then(response => response.json())
         .then(data => {
-            if(data["name"] != "error"){
-                setProducts(data["rows"])
-            }
-            else{
-                console.log(data);
-            }        
+            setProducts(data);      
         })
         .catch((error) => console.error("database unavalible",error))
     },[])
@@ -34,13 +29,7 @@ const AppPage = () => {
         fetch("http://localhost:8080/currentorder")
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            if(data["name"] != "error"){
-                updateData(data["rows"])
-            }
-            else{
-                console.log(data);
-            }        
+            updateData(data);
         })
         .catch((error) => console.error("database unavalible",error))
     }
@@ -79,12 +68,7 @@ const AppPage = () => {
             })
             .then((response) =>  response.json())
             .then(data => {
-                if(data["name"] != "error"){
-                    updateData(data["rows"])
-                }
-                else{
-                    console.log(data);
-                }        
+                updateData(data["rows"]);
             })
             //reset form
             document.getElementById("orderForm").reset();

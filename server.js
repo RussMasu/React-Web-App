@@ -28,21 +28,23 @@ app.get('/', (req, res) => {
 });
 
 // Define a route to fetch all items from the product table
-app.get('/product', (req, res) => {
-    const sql = "select * from product";
-    db.query(sql, (err, data) => {
-        if (err) return res.json(err);
-        return res.json(data);
-    })
+app.get('/product', async (req, res) => {
+    try{
+        const result = await db.query("SELECT * FROM product");
+        res.json(result.rows);
+    } catch(err){
+        console.error(err);
+    }
 });
 
 // Define a route to fetch current order number table
-app.get('/currentorder', (req, res) => {
-    const sql = "SELECT MAX(max_order) OVER(),month_sum,SUM(month_sum) OVER() AS total_sum,mm, yyyy FROM (SELECT MAX(order_id) AS max_order,SUM(order_amount) AS month_sum,DATE_PART('month',order_date) AS mm, DATE_PART('year',order_date) AS yyyy from orders GROUP BY DATE_PART('month',order_date),DATE_PART('year',order_date)) AS q1";
-    db.query(sql, (err, data) => {
-        if (err) return res.json(err);
-        return res.json(data);
-    })
+app.get('/currentorder', async (req, res) => {
+    try{
+        const result = await db.query("SELECT MAX(max_order) OVER(),month_sum,SUM(month_sum) OVER() AS total_sum,mm, yyyy FROM (SELECT MAX(order_id) AS max_order,SUM(order_amount) AS month_sum,DATE_PART('month',order_date) AS mm, DATE_PART('year',order_date) AS yyyy from orders GROUP BY DATE_PART('month',order_date),DATE_PART('year',order_date)) AS q1");
+        res.json(result.rows);
+    } catch(err){
+        console.error(err);
+    }
 });
 
 app.post('/form',async (req,res) =>{
