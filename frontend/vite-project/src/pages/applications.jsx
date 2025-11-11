@@ -102,7 +102,7 @@ const AppPage = () => {
                 </form>
                 </div>
             </Box>
-            <Box display="flex" justifyContent="center" sx={{bgcolor:"#ffffff", height:"220px",width:"250px"}}>
+            <Box display="flex" justifyContent="center" alignItems="center" sx={{bgcolor:"#ffffff", height:"330px",width:"300px"}}>
                 <div>
                     <p>Total Income: ${totalIncome}</p>
                     <p>Monthly Income: ${monthlyIncome}</p>
