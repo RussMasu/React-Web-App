@@ -26,7 +26,7 @@ const AppPage = () => {
     }
 
     function getCurrentOrder(){
-        fetch("/currentorder")
+        fetch("/api/currentorder")
         .then(response => response.json())
         .then(data => {
             updateData(data);
