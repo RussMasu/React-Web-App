@@ -10,9 +10,10 @@ const AppPage = () => {
     const [monthlyIncome,setMonthlyIncome] = useState('');
 
     useEffect(()=>{ //run only once when component mounts
-        fetch("http://localhost:8080/product")
+        fetch("/api/product")//use a proxy /product instead of http://localhost:8080/currentorder
         .then(response => response.json())
         .then(data => {
+            console.log(data);//todo remove
             setProducts(data);      
         })
         .catch((error) => console.error("database unavalible",error))
@@ -26,7 +27,7 @@ const AppPage = () => {
     }
 
     function getCurrentOrder(){
-        fetch("http://localhost:8080/currentorder")
+        fetch("/currentorder")
         .then(response => response.json())
         .then(data => {
             updateData(data);
@@ -61,7 +62,7 @@ const AppPage = () => {
         })
         //submit form
         if(isValid && hasOrder){
-            fetch('http://localhost:8080/form',{
+            fetch("/api/form",{
                 method:"POST",
                 headers:{'Content-type':'application/json'},
                 body:JSON.stringify(formData)
