@@ -13,7 +13,6 @@ const AppPage = () => {
         fetch("/api/product")//use a proxy /product instead of http://localhost:8080/currentorder
         .then(response => response.json())
         .then(data => {
-            console.log(data);//todo remove
             setProducts(data);      
         })
         .catch((error) => console.error("database unavalible",error))

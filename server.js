@@ -11,7 +11,7 @@ const keys = require('./keys.json');
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
-//app.use(express.static('dist'));  //serve static files in dist dir
+app.use(express.static('dist'));  //serve static files in dist dir
 // Create a connection to the PostgreSQL database
 const db = new pg.Pool  ({
     host: keys.host,
