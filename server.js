@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 });
 
 // Define a route to fetch all items from the product table
-app.get('/product', async (req, res) => {
+app.get('/api/product', async (req, res) => {
     try{
         const result = await db.query("SELECT * FROM product");
         res.json(result.rows);
@@ -38,7 +38,7 @@ app.get('/product', async (req, res) => {
 });
 
 // Define a route to fetch current order number table
-app.get('/currentorder', async (req, res) => {
+app.get('/api/currentorder', async (req, res) => {
     try{
         const result = await db.query("SELECT MAX(max_order) OVER(),month_sum,SUM(month_sum) OVER() AS total_sum,mm, yyyy FROM (SELECT MAX(order_id) AS max_order,SUM(order_amount) AS month_sum,DATE_PART('month',order_date) AS mm, DATE_PART('year',order_date) AS yyyy from orders GROUP BY DATE_PART('month',order_date),DATE_PART('year',order_date)) AS q1");
         res.json(result.rows);
@@ -47,7 +47,7 @@ app.get('/currentorder', async (req, res) => {
     }
 });
 
-app.post('/form',async (req,res) =>{
+app.post('/api/form',async (req,res) =>{
     const data = req.body;
     const qcurrentOrderID = await db.query("select MAX(order_id) from orders");
     const currentOrderID = qcurrentOrderID["rows"][0]["max"]+1;
