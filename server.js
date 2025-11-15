@@ -1,11 +1,9 @@
 // server.js
 // Import required modules
-
 const express = require('express'); // Express framework for handling HTTP requests
 const pg = require('pg'); // pg client for Node.js
 const cors = require('cors'); // For web security
 const bodyParser = require('body-parser');
-const keys = require('./keys.json');
 
 // Create an instance of express
 const app = express();
@@ -14,13 +12,12 @@ app.use(cors());
 app.use(express.static('dist'));  //serve static files in dist dir
 // Create a connection to the PostgreSQL database
 const db = new pg.Pool  ({
-    host: keys.host,
-    user: keys.user,
-    password: keys.password,
-    database: keys.database,
-    port: keys.port
+    host: process.env.RDS_HOSTNAME,
+    user: process.env.RDS_USERNAME,
+    password: process.env.RDS_PASSWORD,
+    database: process.env.RDS_DB_NAME,
+    port: process.env.RDS_PORT
 });
-
 // Define a route for the root URL '/'
 app.get('/', (req, res) => {
     // Respond with a JSON message
