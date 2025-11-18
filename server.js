@@ -4,6 +4,8 @@ const express = require('express'); // Express framework for handling HTTP reque
 const pg = require('pg'); // pg client for Node.js
 const cors = require('cors'); // For web security
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const https = require('https');
 
 // Create an instance of express
 const app = express();
@@ -18,6 +20,13 @@ const db = new pg.Pool  ({
     database: process.env.RDS_DB_NAME,
     port: process.env.RDS_PORT
 });
+const privateKey = fs.readFileSync("env/privatekey.pem","utf8");
+const certificate = fs.readFileSync("env/certificate.pem","utf8");
+// Create HTTPS server options
+const credentials = {
+    key : privateKey,
+    cert : certificate
+};
 // Define a route for the root URL '/'
 app.get('/', (req, res) => {
     // Respond with a JSON message
@@ -80,6 +89,10 @@ app.post('/api/form',async (req,res) =>{
 })
 
 // Start the server and listen on port 8080
-app.listen(8080, () => {
+/*app.listen(8080, () => {
+    console.log("listening");
+});*/
+//create HTTPS server
+https.createServer(credentials,app).listen(8080, () => {
     console.log("listening");
 });
