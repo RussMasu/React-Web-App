@@ -4,6 +4,9 @@ const express = require('express'); // Express framework for handling HTTP reque
 const pg = require('pg'); // pg client for Node.js
 const cors = require('cors'); // For web security
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const https = require('https');
+const http = require('http');
 
 // Create an instance of express
 const app = express();
@@ -79,7 +82,11 @@ app.post('/api/form',async (req,res) =>{
     })
 })
 
-// Start the server and listen on port 8080
-app.listen(8080, () => {
-    console.log("listening");
-});
+
+const privateKey = fs.readFileSync("env/privatekey.pem","utf-8");
+const certificate = fs.readFileSync("env/certificate.pem","utf-8");
+const credentials = { key : privateKey, cert : certificate };
+
+// Start the servers and listen on port 8080 and 443
+http.createServer(app).listen(8080);
+https.createServer(credentials,app).listen(443);
